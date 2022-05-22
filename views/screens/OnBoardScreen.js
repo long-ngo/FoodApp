@@ -21,7 +21,8 @@ function OnBoardScreen({ navigation }) {
         style={{
           flex: 1,
           paddingHorizontal: 50,
-          paddingBottom: 40
+          paddingBottom: 40,
+          justifyContent: 'space-between'
         }}
       >
         <View>
@@ -81,7 +82,7 @@ function OnBoardScreen({ navigation }) {
           title={'Getting Start'}
           onPress={() =>
             navigation.navigate({
-              name: 'Home'
+              name: 'BottomNavigator'
             })
           }
         />

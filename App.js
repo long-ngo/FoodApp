@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnBoardScreen from './views/screens/OnBoardScreen';
 import HomeScreen from './views/screens/HomeScreen';
+import BottomNavigator from './views/navigation/BottomNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ function App() {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="OnBoard" component={OnBoardScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Button, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function HomeScreen({ navigation, route }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>HomeScreen</Text>
-    </View>
+    <SafeAreaView>
+      <Text>Home Page</Text>
+    </SafeAreaView>
   );
 }
 
