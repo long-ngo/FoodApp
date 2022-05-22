@@ -10,12 +10,11 @@ const Tab = createBottomTabNavigator();
 function BottomNavigator() {
   return (
     <Tab.Navigator
-      defaultScreenOptions={'Home'}
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: { height: 50, elevation: 0 },
-
+        tabBarStyle: { height: 50, elevation: 4 },
         tabBarIcon: ({ focused, color }) => {
           let iconName;
           switch (route.name) {
@@ -59,7 +58,8 @@ function BottomNavigator() {
                   borderColor: COLORS.primary,
                   borderWidth: 2,
                   borderRadius: 30,
-                  top: -20
+                  top: -20,
+                  elevation: 2
                 }}
               >
                 <Icon name="search" size={28} color={COLORS.primary} />
