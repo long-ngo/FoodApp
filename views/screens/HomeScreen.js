@@ -5,12 +5,15 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../consts/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { FoodButton } from '../components/Button';
+import { FoodCard } from '../components/Card';
+
 import categories from '../consts/categories';
 import { useState } from 'react';
 
@@ -101,6 +104,50 @@ function HomeScreen({ navigation, route }) {
             />
           ))}
         </ScrollView>
+      </View>
+      <View style={{ marginTop: 20, flex: 1 }}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={[
+            {
+              id: '1',
+              name: 'Meat Pizza',
+              ingredients: 'Mixed Pizza',
+              price: '8.30',
+              image: require('../../assets/meatPizza.png')
+            },
+            {
+              id: '2',
+              name: 'Cheese Pizza',
+              ingredients: 'Cheese Pizza',
+              price: '7.10',
+              image: require('../../assets/cheesePizza.png')
+            },
+            {
+              id: '3',
+              name: 'Chicken Burger',
+              ingredients: 'Fried Chicken',
+              price: '5.10',
+              image: require('../../assets/chickenBurger.png')
+            },
+            {
+              id: '4',
+              name: 'Sushi Makizushi',
+              ingredients: 'Salmon Meat',
+              price: '9.55',
+              image: require('../../assets/sushiMakizushi.png')
+            }
+          ]}
+          renderItem={({ item }) => (
+            <FoodCard
+              title={item.name}
+              source={item.image}
+              desc={item.ingredients}
+              price={item.price}
+            />
+          )}
+        />
       </View>
     </SafeAreaView>
   );
