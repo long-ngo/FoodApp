@@ -16,6 +16,7 @@ import { FoodCard } from '../components/Card';
 
 import categories from '../consts/categories';
 import { useState } from 'react';
+import foods from '../consts/foods';
 
 function HomeScreen({ navigation, route }) {
   const [categoryIndex, setCategoryIndex] = useState(0);
@@ -109,43 +110,16 @@ function HomeScreen({ navigation, route }) {
         <FlatList
           showsVerticalScrollIndicator={false}
           numColumns={2}
-          data={[
-            {
-              id: '1',
-              name: 'Meat Pizza',
-              ingredients: 'Mixed Pizza',
-              price: '8.30',
-              image: require('../../assets/meatPizza.png')
-            },
-            {
-              id: '2',
-              name: 'Cheese Pizza',
-              ingredients: 'Cheese Pizza',
-              price: '7.10',
-              image: require('../../assets/cheesePizza.png')
-            },
-            {
-              id: '3',
-              name: 'Chicken Burger',
-              ingredients: 'Fried Chicken',
-              price: '5.10',
-              image: require('../../assets/chickenBurger.png')
-            },
-            {
-              id: '4',
-              name: 'Sushi Makizushi',
-              ingredients: 'Salmon Meat',
-              price: '9.55',
-              image: require('../../assets/sushiMakizushi.png')
-            }
-          ]}
+          data={foods}
           renderItem={({ item }) => (
-            <FoodCard
-              title={item.name}
-              source={item.image}
-              desc={item.ingredients}
-              price={item.price}
-            />
+            <View style={{ marginLeft: 20, marginVertical: 30 }}>
+              <FoodCard
+                title={item.name}
+                source={item.image}
+                desc={item.ingredients}
+                price={item.price}
+              />
+            </View>
           )}
         />
       </View>
