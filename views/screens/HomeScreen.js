@@ -20,6 +20,7 @@ import foods from '../consts/foods';
 
 function HomeScreen({ navigation, route }) {
   const [categoryIndex, setCategoryIndex] = useState(0);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View
@@ -118,6 +119,7 @@ function HomeScreen({ navigation, route }) {
                 source={item.image}
                 desc={item.ingredients}
                 price={item.price}
+                onPress={() => navigation.navigate('Details', item)}
               />
             </View>
           )}

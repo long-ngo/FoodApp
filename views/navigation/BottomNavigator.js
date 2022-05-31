@@ -2,7 +2,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/colors';
-import DetailsScreen from '../screens/DetailsScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import FavoriteScreen from '../screens/FavoriteScreen';
+import UserScreen from '../screens/UserScreen';
 import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -41,10 +43,10 @@ function BottomNavigator() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="User" component={DetailsScreen} />
+      <Tab.Screen name="User" component={UserScreen} />
       <Tab.Screen
         name="Search"
-        component={DetailsScreen}
+        component={HomeScreen}
         options={{
           tabBarIcon: () => {
             return (
@@ -68,8 +70,8 @@ function BottomNavigator() {
           }
         }}
       />
-      <Tab.Screen name="Favorite" component={DetailsScreen} />
-      <Tab.Screen name="Settings" component={HomeScreen} />
+      <Tab.Screen name="Favorite" component={FavoriteScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
 }
