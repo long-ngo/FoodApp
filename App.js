@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnBoardScreen from './views/screens/OnBoardScreen';
 import DetailsScreen from './views/screens/DetailsScreen';
 import BottomNavigator from './views/navigation/BottomNavigator';
+import './firebase/config';
 
 const Stack = createNativeStackNavigator();
 

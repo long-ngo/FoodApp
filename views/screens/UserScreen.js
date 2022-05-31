@@ -3,7 +3,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import '../../firebase/config';
 
 function UserScreen({ route, navigation }) {
   const db = getDatabase();
@@ -11,8 +10,9 @@ function UserScreen({ route, navigation }) {
   useEffect(() => {
     const starCountRef = ref(db, 'foods');
     onValue(starCountRef, (snapshot) => {
-      const foodDb = snapshot.val();
-      setData(foodDb);
+      const userDB = snapshot.val();
+      console.log(userDB);
+      //setData(userDB);
     });
   }, []);
   return (
@@ -34,11 +34,7 @@ function UserScreen({ route, navigation }) {
       </View>
       <View>
         {data.map((item, index) => (
-          <View key={index}>
-            <Text>{item.name}</Text>
-            <Text>{item.price}</Text>
-            <Text>{item.image}</Text>
-          </View>
+          <View key={index}></View>
         ))}
       </View>
     </SafeAreaView>
