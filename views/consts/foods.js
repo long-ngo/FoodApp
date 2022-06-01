@@ -3,29 +3,29 @@ const foods = [
     id: '1',
     name: 'Meat Pizza',
     ingredients: 'Mixed Pizza',
-    price: '8.30',
-    image: require('../../assets/meatPizza.png')
+    time: '8.30',
+    image: 'https://jpeg.ly/Mb_T'
   },
   {
     id: '2',
     name: 'Cheese Pizza',
     ingredients: 'Cheese Pizza',
-    price: '7.10',
-    image: require('../../assets/cheesePizza.png')
+    time: '7.10',
+    image: 'https://jpeg.ly/AKo7'
   },
   {
     id: '3',
     name: 'Chicken Burger',
     ingredients: 'Chicken Burger',
-    price: '5.10',
-    image: require('../../assets/chickenBurger.png')
+    time: '5.10',
+    image: 'https://jpeg.ly/6oFH'
   },
   {
     id: '4',
     name: 'Sushi Makizushi',
     ingredients: 'Salmon Meat',
     price: '9.55',
-    image: require('../../assets/sushiMakizushi.png')
+    image: 'https://jpeg.ly/unZg'
   }
 ];
 

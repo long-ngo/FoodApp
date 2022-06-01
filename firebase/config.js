@@ -11,16 +11,16 @@ const firebaseConfig = {
   measurementId: 'G-D6JDRR4JL7'
 };
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyCaXqA5515L0H0kZA2nKgvF6rku28BPX0M',
-//   authDomain: 'hoangducluudemofibase1.firebaseapp.com',
-//   databaseURL: 'https://hoangducluudemofibase1-default-rtdb.firebaseio.com',
-//   projectId: 'hoangducluudemofibase1',
-//   storageBucket: 'hoangducluudemofibase1.appspot.com',
-//   messagingSenderId: '11033715398',
-//   appId: '1:11033715398:web:99c2377f2d933f22d12dc7',
-//   measurementId: 'G-B1402V5HDB'
-// };
+const firebaseConfig1 = {
+  apiKey: 'AIzaSyCaXqA5515L0H0kZA2nKgvF6rku28BPX0M',
+  authDomain: 'hoangducluudemofibase1.firebaseapp.com',
+  databaseURL: 'https://hoangducluudemofibase1-default-rtdb.firebaseio.com',
+  projectId: 'hoangducluudemofibase1',
+  storageBucket: 'hoangducluudemofibase1.appspot.com',
+  messagingSenderId: '11033715398',
+  appId: '1:11033715398:web:99c2377f2d933f22d12dc7',
+  measurementId: 'G-B1402V5HDB'
+};
 
 if (!getApps().length) {
   initializeApp(firebaseConfig);

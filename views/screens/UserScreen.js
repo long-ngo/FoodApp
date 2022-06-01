@@ -8,10 +8,10 @@ function UserScreen({ route, navigation }) {
   const db = getDatabase();
   const [data, setData] = useState([]);
   useEffect(() => {
-    const starCountRef = ref(db, 'foods');
+    const starCountRef = ref(db, 'User');
     onValue(starCountRef, (snapshot) => {
       const userDB = snapshot.val();
-      console.log(userDB);
+      //console.log(userDB);
       //setData(userDB);
     });
   }, []);

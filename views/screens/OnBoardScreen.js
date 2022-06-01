@@ -1,7 +1,7 @@
 import { View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../consts/colors';
-import { PrimaryButton } from '../components/Button';
+import { ButtonPrimary } from '../components/ButtonPrimary';
 
 function OnBoardScreen({ navigation }) {
   return (
@@ -78,7 +78,7 @@ function OnBoardScreen({ navigation }) {
             }}
           ></View>
         </View>
-        <PrimaryButton
+        <ButtonPrimary
           title={'Getting Start'}
           onPress={() =>
             navigation.navigate({

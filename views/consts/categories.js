@@ -2,22 +2,22 @@ const categories = [
   {
     id: '1',
     name: 'pizza',
-    image: require('../../assets/catergories/pizza.png')
+    image: 'https://jpeg.ly/Kppz'
   },
   {
     id: '2',
     name: 'Burger',
-    image: require('../../assets/catergories/burger.png')
+    image: 'https://jpeg.ly/Hpry'
   },
   {
     id: '3',
     name: 'Sushi',
-    image: require('../../assets/catergories/sushi.png')
+    image: 'https://jpeg.ly/12KJ'
   },
   {
     id: '4',
     name: 'Salad',
-    image: require('../../assets/catergories/salad.png')
+    image: 'https://jpeg.ly/z9aD'
   }
 ];
 

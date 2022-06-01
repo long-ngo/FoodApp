@@ -6,10 +6,10 @@ import {
   TouchableHighlight
 } from 'react-native';
 import COLORS from '../consts/colors';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const { width } = Dimensions.get('screen');
 
-function FoodCard({ title, source, desc, price, onPress = () => {} }) {
+function CardFood({ name, source, desc, time, onPress = () => {} }) {
   return (
     <TouchableHighlight
       activeOpacity={0.9}
@@ -33,10 +33,10 @@ function FoodCard({ title, source, desc, price, onPress = () => {} }) {
             height: 110
           }}
         >
-          <Image source={source} style={{ width: 120, height: 120 }} />
+          <Image source={{ uri: source }} style={{ width: 120, height: 120 }} />
         </View>
         <View>
-          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Text>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{name}</Text>
           <Text style={{ fontSize: 14, color: COLORS.grey }}>{desc}</Text>
         </View>
         <View
@@ -47,7 +47,19 @@ function FoodCard({ title, source, desc, price, onPress = () => {} }) {
             alignItems: 'center'
           }}
         >
-          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>${price}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <MaterialIcons name="access-time" size={18} color={COLORS.grey} />
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                marginLeft: 2,
+                color: COLORS.greyLight
+              }}
+            >
+              {time}
+            </Text>
+          </View>
           <View
             style={{
               width: 30,
@@ -58,7 +70,7 @@ function FoodCard({ title, source, desc, price, onPress = () => {} }) {
               alignItems: 'center'
             }}
           >
-            <Icon name="add" size={20} color={COLORS.white} />
+            <MaterialIcons name="add" size={20} color={COLORS.white} />
           </View>
         </View>
       </View>
@@ -66,4 +78,4 @@ function FoodCard({ title, source, desc, price, onPress = () => {} }) {
   );
 }
 
-export { FoodCard };
+export { CardFood };

@@ -1,5 +1,4 @@
 import { View, Text, Image } from 'react-native';
-import COLORS from '../consts/colors';
 
 function CardStepFood({ num, text, src }) {
   return (

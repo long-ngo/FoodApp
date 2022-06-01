@@ -11,16 +11,33 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../consts/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { FoodButton } from '../components/Button';
-import { FoodCard } from '../components/Card';
-
-import categories from '../consts/categories';
-import { useState } from 'react';
-import foods from '../consts/foods';
+import { ButtonFood } from '../components/ButtonFood';
+import { CardFood } from '../components/CardFood';
+import { useState, useEffect } from 'react';
+import foodsConsts from '../consts/foods';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
 function HomeScreen({ navigation, route }) {
   const [categoryIndex, setCategoryIndex] = useState(0);
-
+  const [categories, setCategories] = useState([]);
+  const [foods, setFoods] = useState([]);
+  const db = getDatabase();
+  useEffect(() => {
+    const starCountRef = ref(db, 'categories');
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      const dataArray = Object.values(data);
+      setCategories(dataArray);
+    });
+  }, []);
+  useEffect(() => {
+    const starCountRef = ref(db, 'foods');
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      const dataArray = Object.values(data);
+      setFoods(dataArray);
+    });
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View
@@ -96,12 +113,12 @@ function HomeScreen({ navigation, route }) {
         }}
       >
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {categories.map((category, index) => (
-            <FoodButton
+          {categories.map((item, index) => (
+            <ButtonFood
               active={categoryIndex == index ? true : false}
-              key={category.id}
-              title={category.name}
-              source={category.image}
+              key={index}
+              title={item.name}
+              source={item.image}
               onPress={() => setCategoryIndex(index)}
             />
           ))}
@@ -114,11 +131,11 @@ function HomeScreen({ navigation, route }) {
           data={foods}
           renderItem={({ item }) => (
             <View style={{ marginLeft: 20, marginVertical: 30 }}>
-              <FoodCard
-                title={item.name}
+              <CardFood
+                name={item.name}
                 source={item.image}
-                desc={item.ingredients}
-                price={item.price}
+                desc={item.featured}
+                time={item.time}
                 onPress={() => navigation.navigate('Details', item)}
               />
             </View>
