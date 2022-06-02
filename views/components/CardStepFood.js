@@ -1,24 +1,27 @@
 import { View, Text, Image } from 'react-native';
 
-function CardStepFood({ num, text, src }) {
+function CardStepFood({ numberStep, description, image }) {
   return (
     <View>
       <View>
-        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Step {num}</Text>
+        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
+          Bước {numberStep}
+        </Text>
       </View>
       <View style={{ marginTop: 14 }}>
-        <Text style={{ fontSize: 18, lineHeight: 28 }}>{text}</Text>
+        <Text style={{ fontSize: 18, lineHeight: 28 }}>{description}</Text>
       </View>
       <View
         style={{
-          elevation: 1,
           borderRadius: 10,
           marginTop: 14
         }}
       >
-        {src && (
+        {!!image && (
           <Image
-            source={src}
+            source={{
+              uri: image
+            }}
             style={{ width: '100%', height: 150 }}
             resizeMode="cover"
           />

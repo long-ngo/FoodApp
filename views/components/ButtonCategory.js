@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import COLORS from '../consts/colors';
 
-function ButtonFood({ title, source, active = false, onPress = () => {} }) {
+function ButtonCategory({ title, image, active = false, onPress = () => {} }) {
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
       <View
@@ -16,19 +16,22 @@ function ButtonFood({ title, source, active = false, onPress = () => {} }) {
           marginRight: 6
         }}
       >
-        <View style={{ backgroundColor: COLORS.white, borderRadius: 20 }}>
-          <Image
-            source={{
-              uri: source
-            }}
-            style={{
-              height: 35,
-              width: 35,
-              borderRadius: 15,
-              resizeMode: 'contain'
-            }}
-          />
-        </View>
+        {image && (
+          <View style={{ backgroundColor: COLORS.white, borderRadius: 20 }}>
+            <Image
+              source={{
+                uri: image
+              }}
+              style={{
+                height: 35,
+                width: 35,
+                borderRadius: 15,
+                resizeMode: 'contain'
+              }}
+            />
+          </View>
+        )}
+
         <Text
           style={{
             fontSize: 15,
@@ -44,4 +47,4 @@ function ButtonFood({ title, source, active = false, onPress = () => {} }) {
   );
 }
 
-export { ButtonFood };
+export { ButtonCategory };

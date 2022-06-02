@@ -11,22 +11,25 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../consts/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { ButtonFood } from '../components/ButtonFood';
+import { ButtonCategory } from '../components/ButtonCategory';
 import { CardFood } from '../components/CardFood';
 import { useState, useEffect } from 'react';
-import foodsConsts from '../consts/foods';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
 function HomeScreen({ navigation, route }) {
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [showCategories, setShowCategories] = useState([]);
   const [foods, setFoods] = useState([]);
+  const [showFoods, setShowFoods] = useState([]);
   const db = getDatabase();
   useEffect(() => {
     const starCountRef = ref(db, 'categories');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      const dataArray = Object.values(data);
+      const dataArray = Object.entries(data).sort(
+        (item1, item2) => item1[1].index - item2[1].index
+      );
       setCategories(dataArray);
     });
   }, []);
@@ -34,10 +37,14 @@ function HomeScreen({ navigation, route }) {
     const starCountRef = ref(db, 'foods');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      const dataArray = Object.values(data);
+      const dataArray = Object.entries(data);
       setFoods(dataArray);
     });
   }, []);
+  useEffect(() => {
+    setShowFoods(foods);
+    setShowCategories(categories);
+  }, [foods, categories]);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View
@@ -113,13 +120,23 @@ function HomeScreen({ navigation, route }) {
         }}
       >
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {categories.map((item, index) => (
-            <ButtonFood
+          {showCategories.map((item, index) => (
+            <ButtonCategory
               active={categoryIndex == index ? true : false}
-              key={index}
-              title={item.name}
-              source={item.image}
-              onPress={() => setCategoryIndex(index)}
+              key={item[0]}
+              title={item[1].name}
+              image={item[1].image}
+              onPress={() => {
+                setCategoryIndex(index);
+                const filterFoods = foods.filter(
+                  (food) => food[1].categoryId === item[0]
+                );
+                if (item[1].name === 'All') {
+                  setShowFoods(foods);
+                } else {
+                  setShowFoods(filterFoods);
+                }
+              }}
             />
           ))}
         </ScrollView>
@@ -128,15 +145,15 @@ function HomeScreen({ navigation, route }) {
         <FlatList
           showsVerticalScrollIndicator={false}
           numColumns={2}
-          data={foods}
+          data={showFoods}
           renderItem={({ item }) => (
-            <View style={{ marginLeft: 20, marginVertical: 30 }}>
+            <View style={{ marginLeft: 20, marginVertical: 30 }} key={item[0]}>
               <CardFood
-                name={item.name}
-                source={item.image}
-                desc={item.featured}
-                time={item.time}
-                onPress={() => navigation.navigate('Details', item)}
+                name={item[1].name}
+                source={item[1].image}
+                desc={item[1].featured}
+                time={item[1].time}
+                onPress={() => navigation.navigate('Details', item[1])}
               />
             </View>
           )}

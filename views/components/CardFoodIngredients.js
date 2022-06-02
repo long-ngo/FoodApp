@@ -3,7 +3,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import COLORS from '../consts/colors';
 
-function CardFoodIngredients() {
+function CardFoodIngredients({ name, time, ingredient }) {
   return (
     <TouchableOpacity activeOpacity={0.99}>
       <View
@@ -17,11 +17,11 @@ function CardFoodIngredients() {
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
-            <Text style={{ fontSize: 22 }}>Toast with egg & avocado</Text>
+            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{name}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialIcons name="access-time" color={COLORS.grey} />
-            <Text style={{ fontSize: 15, color: COLORS.grey }}>15 min</Text>
+            <Text style={{ fontSize: 15, color: COLORS.grey }}>{time} min</Text>
           </View>
         </View>
         <View
@@ -86,106 +86,29 @@ function CardFoodIngredients() {
           </View>
         </View>
         <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10
-            }}
-          >
+          {ingredient.map((item, index) => (
             <View
+              key={index}
               style={{
-                backgroundColor: COLORS.primary,
-                width: 4,
-                height: 22
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 10
               }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 17, color: COLORS.greyLight }}>
-                1 egg
-              </Text>
+            >
+              <View
+                style={{
+                  backgroundColor: COLORS.primary,
+                  width: 4,
+                  height: 22
+                }}
+              />
+              <View style={{ marginLeft: 10 }}>
+                <Text style={{ fontSize: 17, color: COLORS.greyLight }}>
+                  {item}
+                </Text>
+              </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: COLORS.primary,
-                width: 4,
-                height: 22
-              }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 17, color: COLORS.greyLight }}>
-                1 avacado
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: COLORS.primary,
-                width: 4,
-                height: 22
-              }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 17, color: COLORS.greyLight }}>
-                1 toast
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: COLORS.primary,
-                width: 4,
-                height: 22
-              }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 17, color: COLORS.greyLight }}>
-                1 spoon of sunflower all
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: COLORS.primary,
-                width: 4,
-                height: 22
-              }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 17, color: COLORS.greyLight }}>
-                2 spoon of sunflower all
-              </Text>
-            </View>
-          </View>
+          ))}
         </View>
       </View>
     </TouchableOpacity>

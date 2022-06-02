@@ -4,9 +4,21 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/colors';
 import { CardFoodIngredients } from '../components/CardFoodIngredients';
 import { CardStepFood } from '../components/CardStepFood';
+import { useEffect, useState } from 'react';
 
 function DetailsScreen({ route, navigation }) {
-  const { name, image } = route.params;
+  const { name, image, time, ingredients, step } = route.params;
+  const [ingredient, setIngredient] = useState([]);
+  const [steps, setSteps] = useState([]);
+
+  useEffect(() => {
+    const ingredientsArray = ingredients.split('.').map((item) => item.trim());
+    const stepArray = Object.entries(step).sort(
+      (item1, item2) => item1[1].numberStep - item2[1].numberStep
+    );
+    setIngredient(ingredientsArray);
+    setSteps(stepArray);
+  }, []);
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.brownLight, flex: 1 }}>
@@ -32,39 +44,29 @@ function DetailsScreen({ route, navigation }) {
           }}
         >
           <Image
-            source={image}
+            source={{ uri: image }}
             style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
           />
         </View>
         <View style={{ top: -100, marginHorizontal: 20 }}>
-          <CardFoodIngredients />
+          <CardFoodIngredients
+            name={name}
+            time={time}
+            ingredient={ingredient}
+          />
         </View>
         <View
           style={{ marginHorizontal: 20, paddingVertical: 20, marginTop: -100 }}
         >
-          <View style={{ marginTop: 30 }}>
-            <CardStepFood
-              num={1}
-              text="Take an avocado, cut it in half, remove the pit and scoop out the
-          flesh with a spoon. Mash it with a fork in a bowl and drizzle with
-          lemon juice."
-              src={require('../../assets/meatPizza.png')}
-            />
-          </View>
-          <View style={{ marginTop: 30 }}>
-            <CardStepFood
-              num={2}
-              src={require('../../assets/chickenBurger.png')}
-            />
-          </View>
-          <View style={{ marginTop: 30 }}>
-            <CardStepFood
-              num={3}
-              text="Take an avocado, cut it in half, remove the pit and scoop out the
-          flesh with a spoon. Mash it with a fork in a bowl and drizzle with
-          lemon juice."
-            />
-          </View>
+          {steps.map((item) => (
+            <View style={{ marginTop: 20 }} key={item[0]}>
+              <CardStepFood
+                numberStep={item[1].numberStep}
+                description={item[1].description}
+                image={item[1].image}
+              />
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
