@@ -5,9 +5,12 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GoBack from '../components/GoBack';
 import InputValue from '../components/InputValue';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../redux/userSlice';
 
 function LoginScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState('');
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <GoBack name={'Login'} navigation={navigation} />
@@ -78,7 +81,13 @@ function LoginScreen({ route, navigation }) {
           }}
         >
           <View style={{ width: 200 }}>
-            <ButtonPrimary title={'Login'} />
+            <ButtonPrimary
+              title={'Login'}
+              onPress={() => {
+                dispatch(addUser({ name: 'admin' }));
+                navigation.navigate({ name: 'BottomNavigator' });
+              }}
+            />
           </View>
         </View>
       </View>

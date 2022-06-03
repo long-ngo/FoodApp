@@ -2,8 +2,10 @@ import { View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../consts/colors';
 import { ButtonPrimary } from '../components/ButtonPrimary';
+import { useSelector } from 'react-redux';
 
 function OnBoardScreen({ navigation, route }) {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ height: 400 }}>
@@ -82,6 +84,7 @@ function OnBoardScreen({ navigation, route }) {
           title={'Getting Start'}
           onPress={() =>
             navigation.navigate({
+              //name: isLoggedIn ? 'BottomNavigator' : 'Login'
               name: 'BottomNavigator'
             })
           }
