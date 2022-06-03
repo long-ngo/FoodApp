@@ -1,14 +1,11 @@
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import GoBack from '../components/GoBack';
 
-function SettingsScreen() {
+function SettingsScreen({ navigation, route }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View>
-        <Icon name="arrow-back-ios" size={28} />
-        <Text>Setting</Text>
-      </View>
+      <GoBack name={'Setting'} navigation={navigation} />
     </SafeAreaView>
   );
 }

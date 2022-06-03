@@ -66,15 +66,20 @@ function HomeScreen({ navigation, route }) {
             What do you want today
           </Text>
         </View>
-        <Image
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 25,
-            resizeMode: 'contain'
-          }}
-          source={require('../../assets/person.png')}
-        />
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Image
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 25,
+              resizeMode: 'contain'
+            }}
+            source={require('../../assets/person.png')}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{ marginTop: 40, paddingHorizontal: 20, flexDirection: 'row' }}

@@ -16,7 +16,7 @@ function BottomNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: { height: 50, elevation: 4 },
+        tabBarStyle: { height: 50, elevation: 1 },
         tabBarIcon: ({ focused, color }) => {
           let iconName;
           switch (route.name) {

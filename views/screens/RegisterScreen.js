@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import COLORS from '../consts/colors';
 import { ButtonPrimary } from '../components/ButtonPrimary';
 import { useState } from 'react';
@@ -6,16 +6,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import GoBack from '../components/GoBack';
 import InputValue from '../components/InputValue';
 
-function LoginScreen({ route, navigation }) {
+function RegisterScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState('');
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-      <GoBack name={'Login'} navigation={navigation} />
+      <GoBack name={'Sign Up'} navigation={navigation} />
       <View style={{ marginHorizontal: 40, marginTop: 30 }}>
         <View style={{ alignItems: 'center' }}>
           <Image
             source={{
-              uri: 'https://i.pinimg.com/564x/a8/79/0f/a8790f1c75329074a58da5b2c4f85a35.jpg'
+              uri: 'https://i.pinimg.com/736x/19/be/9b/19be9b99ddc6ad8b4371f4f80990a457.jpg'
             }}
             style={{ width: 180, height: 180 }}
             resizeMode="center"
@@ -30,7 +30,7 @@ function LoginScreen({ route, navigation }) {
           }}
         >
           <View>
-            <Text style={{ fontSize: 35, fontWeight: 'bold' }}>Login</Text>
+            <Text style={{ fontSize: 35, fontWeight: 'bold' }}>Sign Up</Text>
           </View>
           <View>
             <Text
@@ -45,17 +45,17 @@ function LoginScreen({ route, navigation }) {
           </View>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Register');
+              navigation.navigate('Login');
             }}
             activeOpacity={0.5}
           >
-            <Text style={{ color: COLORS.light, fontSize: 20 }}>Sign Up</Text>
+            <Text style={{ color: COLORS.light, fontSize: 20 }}>Login</Text>
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 30 }}>
           <View>
             <InputValue
-              name={'username'}
+              name="username"
               activeInput={activeInput}
               placeholder="Username"
               onPressIn={() => setActiveInput('username')}
@@ -63,11 +63,20 @@ function LoginScreen({ route, navigation }) {
           </View>
           <View style={{ marginTop: 20 }}>
             <InputValue
-              name={'password'}
+              name="password"
               activeInput={activeInput}
               placeholder="Password"
-              onPressIn={() => setActiveInput('password')}
               type="password"
+              onPressIn={() => setActiveInput('password')}
+            />
+          </View>
+          <View style={{ marginTop: 20 }}>
+            <InputValue
+              name="confirm"
+              activeInput={activeInput}
+              placeholder="Re-inter password"
+              type="password"
+              onPressIn={() => setActiveInput('confirm')}
             />
           </View>
         </View>
@@ -78,7 +87,7 @@ function LoginScreen({ route, navigation }) {
           }}
         >
           <View style={{ width: 200 }}>
-            <ButtonPrimary title={'Login'} />
+            <ButtonPrimary title={'Sign Up'} />
           </View>
         </View>
       </View>
@@ -86,4 +95,4 @@ function LoginScreen({ route, navigation }) {
   );
 }
 
-export default LoginScreen;
+export default RegisterScreen;

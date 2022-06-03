@@ -1,10 +1,12 @@
 import { View, Text } from 'react-native';
+import GoBack from '../components/GoBack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function FavoriteScreen({ route, navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>FavoriteScreen</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <GoBack name={'Favorite'} navigation={navigation} />
+    </SafeAreaView>
   );
 }
 
