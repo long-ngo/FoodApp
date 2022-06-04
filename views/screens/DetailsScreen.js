@@ -22,8 +22,8 @@ function DetailsScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.brownLight, flex: 1 }}>
+      <GoBack name={name} navigation={navigation} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <GoBack name={name} navigation={navigation} />
         <View
           style={{
             height: 300
