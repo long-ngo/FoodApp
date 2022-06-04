@@ -1,16 +1,37 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ToastAndroid
+} from 'react-native';
 import COLORS from '../consts/colors';
 import { ButtonPrimary } from '../components/ButtonPrimary';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GoBack from '../components/GoBack';
 import InputValue from '../components/InputValue';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../redux/userSlice';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
 function LoginScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState('');
+  const [users, setUsers] = useState([]);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const db = getDatabase();
+
+  useEffect(() => {
+    const starCountRef = ref(db, 'users');
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      const dataArray = Object.entries(data);
+      setUsers(dataArray);
+    });
+  }, []);
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <GoBack name={'Login'} navigation={navigation} />
@@ -62,6 +83,7 @@ function LoginScreen({ route, navigation }) {
               activeInput={activeInput}
               placeholder="Username"
               onPressIn={() => setActiveInput('username')}
+              onChangeText={(text) => setUsername(text)}
             />
           </View>
           <View style={{ marginTop: 20 }}>
@@ -70,6 +92,7 @@ function LoginScreen({ route, navigation }) {
               activeInput={activeInput}
               placeholder="Password"
               onPressIn={() => setActiveInput('password')}
+              onChangeText={(text) => setPassword(text)}
               type="password"
             />
           </View>
@@ -84,8 +107,18 @@ function LoginScreen({ route, navigation }) {
             <ButtonPrimary
               title={'Login'}
               onPress={() => {
-                dispatch(addUser({ name: 'admin' }));
-                navigation.navigate({ name: 'BottomNavigator' });
+                const user = users.find(
+                  (item) =>
+                    item[1].username === username &&
+                    item[1].password == password
+                );
+                if (user) {
+                  ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
+                  dispatch(addUser(user));
+                  navigation.navigate({ name: 'Home' });
+                } else {
+                  ToastAndroid.show('Login false!', ToastAndroid.SHORT);
+                }
               }}
             />
           </View>

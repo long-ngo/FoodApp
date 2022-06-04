@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../consts/colors';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ButtonCategory } from '../components/ButtonCategory';
 import { CardFood } from '../components/CardFood';
 import { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
+import { useSelector } from 'react-redux';
 
 function HomeScreen({ navigation, route }) {
   const [categoryIndex, setCategoryIndex] = useState(0);
@@ -23,6 +25,8 @@ function HomeScreen({ navigation, route }) {
   const [foods, setFoods] = useState([]);
   const [showFoods, setShowFoods] = useState([]);
   const db = getDatabase();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   useEffect(() => {
     const starCountRef = ref(db, 'categories');
     onValue(starCountRef, (snapshot) => {
@@ -59,7 +63,7 @@ function HomeScreen({ navigation, route }) {
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontSize: 28 }}>Hello,</Text>
             <Text style={{ fontSize: 28, fontWeight: 'bold', marginLeft: 10 }}>
-              Aryz
+              You
             </Text>
           </View>
           <Text style={{ fontSize: 22, color: COLORS.grey, marginTop: 5 }}>
@@ -68,17 +72,21 @@ function HomeScreen({ navigation, route }) {
         </View>
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('Login')}
+          // onPress={() => navigation.navigate('Login')}
         >
-          <Image
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 25,
-              resizeMode: 'contain'
-            }}
-            source={require('../../assets/person.png')}
-          />
+          {isLoggedIn ? (
+            <Image
+              style={{
+                height: 50,
+                width: 50,
+                borderRadius: 25,
+                resizeMode: 'contain'
+              }}
+              source={require('../../assets/person.png')}
+            />
+          ) : (
+            <Ionicons name="ios-person-circle-outline" size={50} />
+          )}
         </TouchableOpacity>
       </View>
       <View
@@ -95,7 +103,7 @@ function HomeScreen({ navigation, route }) {
             flex: 1
           }}
         >
-          <Icon name="search" size={28} />
+          <MaterialIcons name="search" size={28} />
           <TextInput
             style={{ fontSize: 18, flex: 1, marginLeft: 10 }}
             placeholder="Search for food"
@@ -113,7 +121,7 @@ function HomeScreen({ navigation, route }) {
             marginLeft: 10
           }}
         >
-          <Icon name="tune" size={28} color={COLORS.white} />
+          <MaterialIcons name="tune" size={28} color={COLORS.white} />
         </TouchableOpacity>
       </View>
       <View

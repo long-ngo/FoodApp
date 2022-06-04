@@ -5,12 +5,13 @@ import { useState } from 'react';
 
 function InputValue({
   onPressIn = () => {},
+  onChangeText = () => {},
   activeInput,
   name,
   placeholder,
   type = 'text'
 }) {
-  const [showPassword, setShowPassword] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
   return (
     <View
       style={{
@@ -24,8 +25,11 @@ function InputValue({
       }}
     >
       <TextInput
-        secureTextEntry={type === 'password' && !showPassword ? true : false}
+        secureTextEntry={type === 'password' && !isShowPassword ? true : false}
         onPressIn={onPressIn}
+        onChangeText={(text) => {
+          onChangeText(text);
+        }}
         placeholder={placeholder}
         style={{
           fontSize: 18,
@@ -35,11 +39,11 @@ function InputValue({
       />
       {type === 'password' && (
         <TouchableOpacity
-          onPress={() => setShowPassword(!showPassword)}
+          onPress={() => setIsShowPassword(!isShowPassword)}
           activeOpacity={0.6}
         >
           <MaterialCommunityIcons
-            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            name={isShowPassword ? 'eye-off-outline' : 'eye-outline'}
             size={20}
             style={{ marginLeft: 10 }}
             color={activeInput === name ? COLORS.primary : COLORS.grey}

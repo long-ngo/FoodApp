@@ -1,15 +1,21 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from '../consts/colors';
 import SettingsScreen from '../screens/SettingsScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
-import UserScreen from '../screens/UserScreen';
+import CreateFoodScreen from '../screens/CreateFoodScreen';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 import { View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 function BottomNavigator() {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -21,29 +27,57 @@ function BottomNavigator() {
           let iconName;
           switch (route.name) {
             case 'Home':
-              iconName = focused ? 'home-filled' : 'home-filled';
-              break;
-            case 'User':
-              iconName = focused ? 'person' : 'person-outline';
-              break;
+              iconName = focused ? 'home-variant' : 'home-variant-outline';
+              return (
+                <MaterialCommunityIcons
+                  name={iconName}
+                  size={28}
+                  color={color}
+                />
+              );
             case 'Search':
               iconName = focused ? 'search' : 'search';
-              break;
+              return <MaterialIcons name={iconName} size={28} color={color} />;
             case 'Favorite':
               iconName = focused ? 'favorite' : 'favorite-outline';
-              break;
+              return <MaterialIcons name={iconName} size={28} color={color} />;
             case 'Settings':
               iconName = focused ? 'settings' : 'settings';
-              break;
+              return <MaterialIcons name={iconName} size={28} color={color} />;
+            case 'CreateFood':
+              iconName = focused ? 'create' : 'create-outline';
+              return <Ionicons name={iconName} size={28} color={color} />;
+            case 'Login':
+              iconName = focused ? 'login' : 'login';
+              return <MaterialIcons name={iconName} size={28} color={color} />;
+            case 'Register':
+              iconName = focused ? 'login-variant' : 'login-variant';
+              return (
+                <MaterialCommunityIcons
+                  name={iconName}
+                  size={28}
+                  color={color}
+                />
+              );
           }
-          return <Icon name={iconName} size={28} color={color} />;
         },
         tabBarInactiveTintColor: COLORS.grey,
         tabBarActiveTintColor: COLORS.primary
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="User" component={UserScreen} />
+      <Tab.Group>
+        <Tab.Screen name="Home" component={HomeScreen} />
+      </Tab.Group>
+      {isLoggedIn ? (
+        <Tab.Group>
+          <Tab.Screen name="CreateFood" component={CreateFoodScreen} />
+        </Tab.Group>
+      ) : (
+        <Tab.Group>
+          <Tab.Screen name="Login" component={LoginScreen} />
+        </Tab.Group>
+      )}
+
       <Tab.Screen
         name="Search"
         component={HomeScreen}
@@ -64,14 +98,25 @@ function BottomNavigator() {
                   elevation: 2
                 }}
               >
-                <Icon name="search" size={28} color={COLORS.primary} />
+                <MaterialIcons name="search" size={28} color={COLORS.primary} />
               </View>
             );
           }
         }}
       />
-      <Tab.Screen name="Favorite" component={FavoriteScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      {isLoggedIn ? (
+        <Tab.Group>
+          <Tab.Screen name="Favorite" component={FavoriteScreen} />
+        </Tab.Group>
+      ) : (
+        <Tab.Group>
+          <Tab.Screen name="Register" component={RegisterScreen} />
+        </Tab.Group>
+      )}
+
+      <Tab.Group>
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Group>
     </Tab.Navigator>
   );
 }

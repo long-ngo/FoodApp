@@ -1,10 +1,10 @@
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/colors';
 import { CardFoodIngredients } from '../components/CardFoodIngredients';
 import { CardStepFood } from '../components/CardStepFood';
 import { useEffect, useState } from 'react';
+import GoBack from '../components/GoBack';
 
 function DetailsScreen({ route, navigation }) {
   const { name, image, time, ingredients, step } = route.params;
@@ -22,22 +22,8 @@ function DetailsScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.brownLight, flex: 1 }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingVertical: 20,
-          paddingHorizontal: 20,
-          alignItems: 'center'
-        }}
-      >
-        <MaterialIcons
-          name="arrow-back-ios"
-          size={28}
-          onPress={() => navigation.goBack()}
-        />
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{name}</Text>
-      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <GoBack name={name} navigation={navigation} />
         <View
           style={{
             height: 300

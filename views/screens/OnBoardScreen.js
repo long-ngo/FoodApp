@@ -84,7 +84,6 @@ function OnBoardScreen({ navigation, route }) {
           title={'Getting Start'}
           onPress={() =>
             navigation.navigate({
-              //name: isLoggedIn ? 'BottomNavigator' : 'Login'
               name: 'BottomNavigator'
             })
           }
