@@ -9,7 +9,7 @@ import COLORS from '../consts/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const { width } = Dimensions.get('screen');
 
-function CardFood({ name, source, desc, time, onPress = () => {} }) {
+function CardFood({ title, source, desc, time, onPress = () => {} }) {
   return (
     <TouchableHighlight
       activeOpacity={0.9}
@@ -36,7 +36,7 @@ function CardFood({ name, source, desc, time, onPress = () => {} }) {
           <Image source={{ uri: source }} style={{ width: 120, height: 120 }} />
         </View>
         <View>
-          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{name}</Text>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Text>
           <Text style={{ fontSize: 14, color: COLORS.grey }}>{desc}</Text>
         </View>
         <View

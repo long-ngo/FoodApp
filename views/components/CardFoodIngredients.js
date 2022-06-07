@@ -3,7 +3,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import COLORS from '../consts/colors';
 
-function CardFoodIngredients({ name, time, ingredient }) {
+function CardFoodIngredients({ title, time, ingredient }) {
   return (
     <TouchableOpacity activeOpacity={0.99}>
       <View
@@ -17,7 +17,7 @@ function CardFoodIngredients({ name, time, ingredient }) {
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
-            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{name}</Text>
+            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{title}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialIcons name="access-time" color={COLORS.grey} />

@@ -26,6 +26,7 @@ function HomeScreen({ navigation, route }) {
   const [showFoods, setShowFoods] = useState([]);
   const db = getDatabase();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const userLogin = useSelector((state) => state.user.userLogin);
 
   useEffect(() => {
     const starCountRef = ref(db, 'categories');
@@ -63,7 +64,11 @@ function HomeScreen({ navigation, route }) {
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontSize: 28 }}>Hello,</Text>
             <Text style={{ fontSize: 28, fontWeight: 'bold', marginLeft: 10 }}>
-              You
+              {isLoggedIn
+                ? userLogin.name
+                  ? userLogin.name
+                  : userLogin.username
+                : 'You'}
             </Text>
           </View>
           <Text style={{ fontSize: 22, color: COLORS.grey, marginTop: 5 }}>
@@ -75,17 +80,21 @@ function HomeScreen({ navigation, route }) {
           // onPress={() => navigation.navigate('Login')}
         >
           {isLoggedIn ? (
-            <Image
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 25,
-                resizeMode: 'contain'
-              }}
-              source={require('../../assets/person.png')}
-            />
+            userLogin.image ? (
+              <Image
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 25,
+                  resizeMode: 'contain'
+                }}
+                source={{ uri: userLogin.image }}
+              />
+            ) : (
+              <Ionicons name="person" size={40} />
+            )
           ) : (
-            <Ionicons name="ios-person-circle-outline" size={50} />
+            <Ionicons name="person-circle-outline" size={50} />
           )}
         </TouchableOpacity>
       </View>
@@ -162,7 +171,7 @@ function HomeScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <View style={{ marginLeft: 20, marginVertical: 30 }} key={item[0]}>
               <CardFood
-                name={item[1].name}
+                title={item[1].name}
                 source={item[1].image}
                 desc={item[1].featured}
                 time={item[1].time}

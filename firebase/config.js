@@ -1,4 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
+
 import {
   API_KEY,
   AUTH_DOMAIN,

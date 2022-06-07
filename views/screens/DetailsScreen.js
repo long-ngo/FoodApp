@@ -12,6 +12,7 @@ function DetailsScreen({ route, navigation }) {
   const [steps, setSteps] = useState([]);
 
   useEffect(() => {
+    console.log(ingredients);
     const ingredientsArray = ingredients.split('.').map((item) => item.trim());
     const stepArray = Object.entries(step).sort(
       (item1, item2) => item1[1].numberStep - item2[1].numberStep
@@ -36,7 +37,7 @@ function DetailsScreen({ route, navigation }) {
         </View>
         <View style={{ top: -100, marginHorizontal: 20 }}>
           <CardFoodIngredients
-            name={name}
+            title={name}
             time={time}
             ingredient={ingredient}
           />

@@ -2,6 +2,7 @@ import { TextInput, View, TouchableOpacity } from 'react-native';
 import COLORS from '../consts/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useState } from 'react';
+import { FlatList } from 'react-native-web';
 
 function InputValue({
   onPressIn = () => {},
@@ -9,7 +10,9 @@ function InputValue({
   activeInput,
   name,
   placeholder,
-  type = 'text'
+  type = 'text',
+  value = '',
+  editable = true
 }) {
   const [isShowPassword, setIsShowPassword] = useState(false);
   return (
@@ -25,6 +28,8 @@ function InputValue({
       }}
     >
       <TextInput
+        editable={editable}
+        value={value}
         secureTextEntry={type === 'password' && !isShowPassword ? true : false}
         onPressIn={onPressIn}
         onChangeText={(text) => {
@@ -33,7 +38,7 @@ function InputValue({
         placeholder={placeholder}
         style={{
           fontSize: 18,
-          height: 50,
+          height: 40,
           flex: 1
         }}
       />

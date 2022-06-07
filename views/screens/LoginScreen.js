@@ -84,6 +84,7 @@ function LoginScreen({ route, navigation }) {
               placeholder="Username"
               onPressIn={() => setActiveInput('username')}
               onChangeText={(text) => setUsername(text)}
+              value={username}
             />
           </View>
           <View style={{ marginTop: 20 }}>
@@ -94,6 +95,7 @@ function LoginScreen({ route, navigation }) {
               onPressIn={() => setActiveInput('password')}
               onChangeText={(text) => setPassword(text)}
               type="password"
+              value={password}
             />
           </View>
         </View>
@@ -114,7 +116,7 @@ function LoginScreen({ route, navigation }) {
                 );
                 if (user) {
                   ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
-                  dispatch(addUser(user));
+                  dispatch(addUser(user[1]));
                   navigation.navigate({ name: 'Home' });
                 } else {
                   ToastAndroid.show('Login false!', ToastAndroid.SHORT);
