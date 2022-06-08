@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import COLORS from '../consts/colors';
 import { ButtonPrimary } from '../components/ButtonPrimary';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GoBack from '../components/GoBack';
 import InputValue from '../components/InputValue';
@@ -11,10 +11,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { loadXHR } from '../../convert/imageToBlob';
 
 import * as Storage from 'firebase/storage';
-import { ref, getDatabase, set, push } from 'firebase/database';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { ref, getDatabase, set, push, onValue } from 'firebase/database';
 
 function RegisterScreen({ route, navigation }) {
+  const [users, setUsers] = useState([]);
   const [activeInput, setActiveInput] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -22,6 +22,16 @@ function RegisterScreen({ route, navigation }) {
   const [imageSource, setImageSource] = useState('');
   const storage = Storage.getStorage();
   const database = getDatabase();
+
+  useEffect(() => {
+    const starCountRef = ref(database, 'users');
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      let dataArray = [];
+      data && (dataArray = Object.entries(data));
+      setUsers(dataArray);
+    });
+  }, []);
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -106,14 +116,49 @@ function RegisterScreen({ route, navigation }) {
       });
   }
 
+  function clearAll() {
+    setUsername('');
+    setPassword('');
+    setConfirm('');
+    setImageSource('');
+  }
+
+  function checkAll() {
+    const regex = new RegExp(/\s/);
+    const userFind = users.findIndex((item) => {
+      return item[1].username === username;
+    });
+
+    if (username === '' || password === '' || confirm === '') {
+      alert('giá trị không được rỗng');
+      return false;
+    } else if (regex.test(username)) {
+      alert('username không được có khoảng trắng');
+      return false;
+    } else if (!userFind) {
+      alert('username đã tồn tại');
+      return false;
+    } else if (password !== confirm) {
+      alert('password không giống nhau');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function validationInput() {
+    setUsername(username.trim());
+    setPassword(password.trim());
+    setConfirm(confirm.trim());
+  }
+
   function signUp() {
-    if (password === confirm) {
+    validationInput();
+
+    if (checkAll()) {
       uploadImage();
-      setUsername('');
-      setPassword('');
-      setConfirm('');
-      setImageSource('');
-      navigation.navigate('Home');
+      clearAll();
+      navigation.navigate('Login');
     }
   }
 

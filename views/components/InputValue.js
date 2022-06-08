@@ -12,7 +12,9 @@ function InputValue({
   placeholder,
   type = 'text',
   value = '',
-  editable = true
+  editable = true,
+  multiline = false,
+  numberOfLines = 1
 }) {
   const [isShowPassword, setIsShowPassword] = useState(false);
   return (
@@ -21,13 +23,14 @@ function InputValue({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        height: 50,
         borderBottomWidth: activeInput === name ? 1 : 0.5,
         borderBottomColor:
           activeInput === name ? COLORS.primary : COLORS.greyLight
       }}
     >
       <TextInput
+        numberOfLines={numberOfLines}
+        multiline={multiline}
         editable={editable}
         value={value}
         secureTextEntry={type === 'password' && !isShowPassword ? true : false}
@@ -38,8 +41,7 @@ function InputValue({
         placeholder={placeholder}
         style={{
           fontSize: 18,
-          height: 40,
-          flex: 1
+          paddingVertical: 10
         }}
       />
       {type === 'password' && (

@@ -135,7 +135,7 @@ function HomeScreen({ navigation, route }) {
       </View>
       <View
         style={{
-          paddingTop: 30,
+          marginTop: 20,
           paddingHorizontal: 20,
           justifyContent: 'center',
           alignItems: 'center'

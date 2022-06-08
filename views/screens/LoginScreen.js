@@ -18,8 +18,8 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 function LoginScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState('');
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('ryu');
+  const [password, setPassword] = useState('1');
   const dispatch = useDispatch();
   const db = getDatabase();
 
@@ -27,10 +27,37 @@ function LoginScreen({ route, navigation }) {
     const starCountRef = ref(db, 'users');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      const dataArray = Object.entries(data);
+      let dataArray;
+      data && (dataArray = Object.entries(data));
       setUsers(dataArray);
     });
   }, []);
+
+  function checkAll() {
+    if (username === '' || password === '') {
+      alert('giá trị không được rỗng');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function login() {
+    if (checkAll()) {
+      const user = users.find(
+        (item) =>
+          item[1].username === username.trim() &&
+          item[1].password == password.trim()
+      );
+      if (user) {
+        ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
+        dispatch(addUser(user[1]));
+        navigation.navigate({ name: 'Home' });
+      } else {
+        ToastAndroid.show('Login false!', ToastAndroid.SHORT);
+      }
+    }
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
@@ -109,18 +136,7 @@ function LoginScreen({ route, navigation }) {
             <ButtonPrimary
               title={'Login'}
               onPress={() => {
-                const user = users.find(
-                  (item) =>
-                    item[1].username === username &&
-                    item[1].password == password
-                );
-                if (user) {
-                  ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
-                  dispatch(addUser(user[1]));
-                  navigation.navigate({ name: 'Home' });
-                } else {
-                  ToastAndroid.show('Login false!', ToastAndroid.SHORT);
-                }
+                login();
               }}
             />
           </View>
