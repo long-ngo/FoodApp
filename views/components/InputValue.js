@@ -2,7 +2,6 @@ import { TextInput, View, TouchableOpacity } from 'react-native';
 import COLORS from '../consts/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useState } from 'react';
-import { FlatList } from 'react-native-web';
 
 function InputValue({
   onPressIn = () => {},

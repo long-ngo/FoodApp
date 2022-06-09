@@ -1,22 +1,35 @@
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-function GoBack({ name, navigation }) {
+function GoBack({
+  name,
+  navigation,
+  titleRight = '',
+  onPressTitleRight = () => {}
+}) {
   return (
     <View
       style={{
-        flexDirection: 'row',
         paddingVertical: 20,
         paddingHorizontal: 20,
-        alignItems: 'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between'
       }}
     >
-      <MaterialIcons
-        name="arrow-back-ios"
-        size={28}
-        onPress={() => navigation.goBack()}
-      />
-      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{name}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.goBack()}
+        >
+          <MaterialIcons name="arrow-back-ios" size={28} />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{name}</Text>
+      </View>
+      {!!titleRight && (
+        <TouchableOpacity onPress={onPressTitleRight} activeOpacity={0.5}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{titleRight}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

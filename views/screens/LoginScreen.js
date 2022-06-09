@@ -27,15 +27,17 @@ function LoginScreen({ route, navigation }) {
     const starCountRef = ref(db, 'users');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      let dataArray;
-      data && (dataArray = Object.entries(data));
+      const dataArray = data ? Object.entries(data) : [];
       setUsers(dataArray);
     });
+    return () => setUsers([]);
   }, []);
 
   function checkAll() {
     if (username === '' || password === '') {
       alert('giá trị không được rỗng');
+      return false;
+    } else if (!users || !users.length) {
       return false;
     } else {
       return true;
@@ -47,15 +49,17 @@ function LoginScreen({ route, navigation }) {
       const user = users.find(
         (item) =>
           item[1].username === username.trim() &&
-          item[1].password == password.trim()
+          item[1].password === password.trim()
       );
       if (user) {
         ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
         dispatch(addUser(user[1]));
         navigation.navigate({ name: 'Home' });
       } else {
-        ToastAndroid.show('Login false!', ToastAndroid.SHORT);
+        ToastAndroid.show('User or password error!', ToastAndroid.SHORT);
       }
+    } else {
+      ToastAndroid.show('Login false!', ToastAndroid.SHORT);
     }
   }
 

@@ -32,18 +32,26 @@ function HomeScreen({ navigation, route }) {
     const starCountRef = ref(db, 'categories');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      const dataArray = Object.entries(data).sort(
-        (item1, item2) => item1[1].index - item2[1].index
-      );
+      const dataArray = data
+        ? Object.entries(data).sort(
+            (item1, item2) => item1[1].index - item2[1].index
+          )
+        : [];
       setCategories(dataArray);
+      return () => {
+        setCategories([]);
+      };
     });
   }, []);
   useEffect(() => {
     const starCountRef = ref(db, 'foods');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      const dataArray = Object.entries(data);
+      const dataArray = data ? Object.entries(data) : [];
       setFoods(dataArray);
+      return () => {
+        setFoods([]);
+      };
     });
   }, []);
   useEffect(() => {

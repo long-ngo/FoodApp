@@ -6,7 +6,10 @@ import { useState, useEffect } from 'react';
 import COLORS from '../consts/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import * as ImagePicker from 'expo-image-picker';
+import { ref, getDatabase, set, push, onValue } from 'firebase/database';
+import { uploadImage } from '../../firebase/upload';
+import { useSelector } from 'react-redux';
 
 function CreateFoodScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState('');
@@ -14,25 +17,29 @@ function CreateFoodScreen({ route, navigation }) {
   const [featured, setFeatured] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [foodImageSource, setFoodImageSource] = useState('');
   const [steps, setSteps] = useState([]);
-  const [stepImageSource, setStepImageSource] = useState([]);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
   const db = getDatabase();
+  const userLogin = useSelector((state) => state.user.userLogin);
 
   useEffect(() => {
     const starCountRef = ref(db, 'categories');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      let dataArray = [];
-      data &&
-        (dataArray = Object.entries(data).sort(
-          (item1, item2) => item1[1].index - item2[1].index
-        ));
+      const dataArray = data
+        ? Object.entries(data).sort(
+            (item1, item2) => item1[1].index - item2[1].index
+          )
+        : [];
 
       setCategories(dataArray);
     });
+    return () => {
+      setCategories([]);
+    };
   }, []);
 
   useEffect(() => {
@@ -46,23 +53,103 @@ function CreateFoodScreen({ route, navigation }) {
     setItems(selectArray);
   }, [categories]);
 
+  async function pickImage(key, index = null) {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [1, 1],
+      quality: 1
+    });
+
+    if (!result.cancelled) {
+      switch (key) {
+        case 'food':
+          setFoodImageSource(result.uri);
+          break;
+        case 'step':
+          const stepArray = [...steps];
+          stepArray[index].imageSource = result.uri;
+          setSteps(stepArray);
+          break;
+      }
+    }
+  }
+
+  function writeFoodData(
+    name,
+    featured,
+    categoryId,
+    ingredients,
+    step,
+    time,
+    userId
+  ) {
+    const userRef = push(ref(db, 'foods'));
+    set(userRef, {
+      name: name,
+      featured: featured,
+      categoryId: categoryId,
+      ingredients: ingredients,
+      step: step,
+      time: time,
+      userId: userId
+    })
+      .then(() => console.log('Successful upload'))
+      .catch((err) => console.log(err));
+  }
+
+  function handleSubmit() {
+    const stepsArray = steps.map((item, index) => {
+      return Promise.resolve(
+        uploadImage(item.imageSource, `foods/${foodName}/step${index + 1}`)
+      );
+    });
+    Promise.all([...stepsArray]).then((urlArray) => {
+      console.log(value);
+
+      //writeFoodData(foodName, featured, value, ingredients, steps, time, userLogin[0])
+    });
+  }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <GoBack name={'Create Food'} navigation={navigation} />
+      <GoBack
+        onPressTitleRight={handleSubmit}
+        name={'Create Food'}
+        navigation={navigation}
+        titleRight="Xong"
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginHorizontal: 30, marginBottom: 30 }}>
           <View
             style={{
-              alignItems: 'center'
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 200,
+              borderRadius: 10,
+              borderWidth: 0.5,
+              borderColor: COLORS.grey
             }}
           >
-            <Image
-              source={{
-                uri: 'https://i.pinimg.com/originals/f0/78/a4/f078a40e4c70594029f27c7932b0ac3e.jpg'
-              }}
-              style={{ width: 200, height: 200 }}
-              resizeMode="contain"
-            />
+            {foodImageSource ? (
+              <Image
+                source={{
+                  uri: foodImageSource
+                }}
+                style={{ width: 190, height: 190 }}
+                resizeMode="contain"
+              />
+            ) : (
+              <TouchableOpacity
+                onPress={() => pickImage('food')}
+                activeOpacity={0.5}
+              >
+                <MaterialIcons
+                  name="add-photo-alternate"
+                  size={48}
+                  color={COLORS.grey}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={{ marginTop: 10 }}>
             <InputValue
@@ -237,11 +324,11 @@ function CreateFoodScreen({ route, navigation }) {
                       borderRadius: 4
                     }}
                   >
-                    {stepImageSource[index] ? (
+                    {!!item.imageSource ? (
                       <Image
                         style={{ width: 100, height: 100, borderRadius: 4 }}
                         source={{
-                          uri: stepImageSource[index]
+                          uri: item.imageSource
                         }}
                         resizeMode="cover"
                       />
@@ -249,10 +336,7 @@ function CreateFoodScreen({ route, navigation }) {
                       <TouchableOpacity
                         activeOpacity={0.8}
                         onPress={() => {
-                          const stepImageArray = [...stepImageSource];
-                          stepImageArray[index] =
-                            'https://i.pinimg.com/564x/4f/60/3b/4f603b6bcbfbeca9e93f01a57c041c86.jpg';
-                          setStepImageSource(stepImageArray);
+                          pickImage('step', index);
                         }}
                       >
                         <MaterialIcons
@@ -279,15 +363,15 @@ function CreateFoodScreen({ route, navigation }) {
                       <InputValue
                         numberOfLines={4}
                         multiline
-                        value={item}
+                        value={item.value}
                         name={`step${index}`}
                         activeInput={activeInput}
                         placeholder="Nhập cách làm"
                         onPressIn={() => setActiveInput(`step${index}`)}
                         onChangeText={(text) => {
-                          const arr = [...steps];
-                          arr[index] = text;
-                          setSteps(arr);
+                          const stepsArray = [...steps];
+                          stepsArray[index].value = text;
+                          setSteps(stepsArray);
                         }}
                       />
                     </View>
@@ -298,9 +382,6 @@ function CreateFoodScreen({ route, navigation }) {
                           const stepsArray = [...steps];
                           stepsArray.splice(index, 1);
                           setSteps(stepsArray);
-                          const imageArray = [...stepImageSource];
-                          imageArray.splice(index, 1);
-                          setStepImageSource(imageArray);
                         }}
                       >
                         <View>
@@ -331,9 +412,12 @@ function CreateFoodScreen({ route, navigation }) {
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={() => {
-                    const arr = [...steps];
-                    arr.push('');
-                    setSteps(arr);
+                    const stepsArray = [...steps];
+                    stepsArray.push({
+                      value: '',
+                      imageSource: ''
+                    });
+                    setSteps(stepsArray);
                   }}
                 >
                   <MaterialIcons name="add" size={30} />

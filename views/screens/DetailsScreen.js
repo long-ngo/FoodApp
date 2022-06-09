@@ -18,6 +18,10 @@ function DetailsScreen({ route, navigation }) {
     );
     setIngredient(ingredientsArray);
     setSteps(stepArray);
+    return () => {
+      setIngredient([]);
+      setSteps([]);
+    };
   }, []);
 
   return (

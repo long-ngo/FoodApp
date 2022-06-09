@@ -8,9 +8,7 @@ import InputValue from '../components/InputValue';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import * as ImagePicker from 'expo-image-picker';
-import { loadXHR } from '../../convert/imageToBlob';
-
-import * as Storage from 'firebase/storage';
+import { uploadImage } from '../../firebase/upload';
 import { ref, getDatabase, set, push, onValue } from 'firebase/database';
 
 function RegisterScreen({ route, navigation }) {
@@ -20,17 +18,18 @@ function RegisterScreen({ route, navigation }) {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [imageSource, setImageSource] = useState('');
-  const storage = Storage.getStorage();
   const database = getDatabase();
 
   useEffect(() => {
     const starCountRef = ref(database, 'users');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      let dataArray = [];
-      data && (dataArray = Object.entries(data));
+      const dataArray = data ? Object.entries(data) : [];
       setUsers(dataArray);
     });
+    return () => {
+      setUsers([]);
+    };
   }, []);
 
   async function pickImage() {
@@ -55,65 +54,6 @@ function RegisterScreen({ route, navigation }) {
     })
       .then(() => console.log('Successful upload'))
       .catch((err) => console.log(err));
-  }
-
-  async function uploadImage() {
-    const imageRef = Storage.ref(storage, `users/${username}`);
-
-    loadXHR(imageSource)
-      .then((file) => {
-        const uploadTask = Storage.uploadBytesResumable(imageRef, file, {
-          contentType: 'image/png'
-        });
-
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-              case 'paused':
-                console.log('Upload is paused');
-                break;
-              case 'running':
-                console.log('Upload is running');
-                break;
-            }
-          },
-          (error) => {
-            // A full list of error codes is available at
-            // https://firebase.google.com/docs/storage/web/handle-errors
-            switch (error.code) {
-              case 'storage/unauthorized':
-                // User doesn't have permission to access the object
-                break;
-              case 'storage/canceled':
-                // User canceled the upload
-                break;
-
-              // ...
-
-              case 'storage/unknown':
-                // Unknown error occurred, inspect error.serverResponse
-                break;
-            }
-          },
-          () => {
-            // Upload completed successfully, now we can get the download URL
-            Storage.getDownloadURL(uploadTask.snapshot.ref).then(
-              (downloadURL) => {
-                console.log('File available at', downloadURL);
-                writeUserData(username, password, downloadURL);
-              }
-            );
-          }
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   function clearAll() {
@@ -152,11 +92,12 @@ function RegisterScreen({ route, navigation }) {
     setConfirm(confirm.trim());
   }
 
-  function signUp() {
+  async function signUp() {
     validationInput();
 
     if (checkAll()) {
-      uploadImage();
+      const downloadURL = await uploadImage(imageSource, `users/${username}`);
+      writeUserData(username, password, downloadURL);
       clearAll();
       navigation.navigate('Login');
     }
