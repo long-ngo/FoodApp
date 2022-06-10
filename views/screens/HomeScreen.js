@@ -32,14 +32,11 @@ function HomeScreen({ navigation, route }) {
     const starCountRef = ref(db, 'categories');
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      const dataArray = data
-        ? Object.entries(data).sort(
-            (item1, item2) => item1[1].index - item2[1].index
-          )
-        : [];
+      const dataArray = data ? Object.entries(data) : [];
       setCategories(dataArray);
       return () => {
         setCategories([]);
+        setShowCategories([]);
       };
     });
   }, []);
@@ -51,6 +48,7 @@ function HomeScreen({ navigation, route }) {
       setFoods(dataArray);
       return () => {
         setFoods([]);
+        setShowFoods([]);
       };
     });
   }, []);
@@ -73,9 +71,9 @@ function HomeScreen({ navigation, route }) {
             <Text style={{ fontSize: 28 }}>Hello,</Text>
             <Text style={{ fontSize: 28, fontWeight: 'bold', marginLeft: 10 }}>
               {isLoggedIn
-                ? userLogin.name
-                  ? userLogin.name
-                  : userLogin.username
+                ? userLogin[1].name
+                  ? userLogin[1].name
+                  : userLogin[1].username
                 : 'You'}
             </Text>
           </View>
@@ -88,7 +86,7 @@ function HomeScreen({ navigation, route }) {
           // onPress={() => navigation.navigate('Login')}
         >
           {isLoggedIn ? (
-            userLogin.image ? (
+            userLogin[1].image ? (
               <Image
                 style={{
                   height: 50,
@@ -96,7 +94,7 @@ function HomeScreen({ navigation, route }) {
                   borderRadius: 25,
                   resizeMode: 'contain'
                 }}
-                source={{ uri: userLogin.image }}
+                source={{ uri: userLogin[1].image }}
               />
             ) : (
               <Ionicons name="person" size={40} />

@@ -17,7 +17,7 @@ function CreateFoodScreen({ route, navigation }) {
   const [featured, setFeatured] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [foodImageSource, setFoodImageSource] = useState('');
+  const [foodImage, setFoodImage] = useState('');
   const [steps, setSteps] = useState([]);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -64,11 +64,11 @@ function CreateFoodScreen({ route, navigation }) {
     if (!result.cancelled) {
       switch (key) {
         case 'food':
-          setFoodImageSource(result.uri);
+          setFoodImage(result.uri);
           break;
         case 'step':
           const stepArray = [...steps];
-          stepArray[index].imageSource = result.uri;
+          stepArray[index].stepImage = result.uri;
           setSteps(stepArray);
           break;
       }
@@ -78,36 +78,64 @@ function CreateFoodScreen({ route, navigation }) {
   function writeFoodData(
     name,
     featured,
-    categoryId,
+    image,
     ingredients,
     step,
     time,
-    userId
+    userId,
+    categoryId
   ) {
-    const userRef = push(ref(db, 'foods'));
-    set(userRef, {
+    const foodRef = push(ref(db, 'foods'));
+    set(foodRef, {
       name: name,
       featured: featured,
-      categoryId: categoryId,
+      image: image,
       ingredients: ingredients,
       step: step,
       time: time,
-      userId: userId
+      userId: userId,
+      categoryId: categoryId
     })
       .then(() => console.log('Successful upload'))
       .catch((err) => console.log(err));
   }
 
   function handleSubmit() {
+    const foodsArray = [
+      Promise.resolve(
+        uploadImage(
+          foodImage,
+          `foods/${foodName + userLogin[1].username}/${foodName}`
+        )
+      )
+    ];
     const stepsArray = steps.map((item, index) => {
       return Promise.resolve(
-        uploadImage(item.imageSource, `foods/${foodName}/step${index + 1}`)
+        uploadImage(
+          item.stepImage,
+          `foods/${foodName + userLogin[1].username}/step${index + 1}`
+        )
       );
     });
-    Promise.all([...stepsArray]).then((urlArray) => {
-      console.log(value);
+    Promise.all([...foodsArray, ...stepsArray]).then((urlArray) => {
+      const time = 15;
+      const image = urlArray.splice(0, 1).join('');
+      const stepsArray = steps.map((item, index) => ({
+        description: item.description,
+        image: urlArray[index]
+      }));
+      const ingredientsString = ingredients.join('&');
 
-      //writeFoodData(foodName, featured, value, ingredients, steps, time, userLogin[0])
+      writeFoodData(
+        foodName,
+        featured,
+        image,
+        ingredientsString,
+        stepsArray,
+        time,
+        userLogin[0],
+        value
+      );
     });
   }
   return (
@@ -130,10 +158,10 @@ function CreateFoodScreen({ route, navigation }) {
               borderColor: COLORS.grey
             }}
           >
-            {foodImageSource ? (
+            {foodImage ? (
               <Image
                 source={{
-                  uri: foodImageSource
+                  uri: foodImage
                 }}
                 style={{ width: 190, height: 190 }}
                 resizeMode="contain"
@@ -187,6 +215,7 @@ function CreateFoodScreen({ route, navigation }) {
               />
             </View>
           </View>
+
           <View style={{ marginTop: 20 }}>
             <View>
               <Text style={{ fontSize: 20 }}>Nguyên liệu</Text>
@@ -324,11 +353,11 @@ function CreateFoodScreen({ route, navigation }) {
                       borderRadius: 4
                     }}
                   >
-                    {!!item.imageSource ? (
+                    {!!item.stepImage ? (
                       <Image
                         style={{ width: 100, height: 100, borderRadius: 4 }}
                         source={{
-                          uri: item.imageSource
+                          uri: item.stepImage
                         }}
                         resizeMode="cover"
                       />
@@ -363,14 +392,14 @@ function CreateFoodScreen({ route, navigation }) {
                       <InputValue
                         numberOfLines={4}
                         multiline
-                        value={item.value}
+                        value={item.description}
                         name={`step${index}`}
                         activeInput={activeInput}
                         placeholder="Nhập cách làm"
                         onPressIn={() => setActiveInput(`step${index}`)}
                         onChangeText={(text) => {
                           const stepsArray = [...steps];
-                          stepsArray[index].value = text;
+                          stepsArray[index].description = text;
                           setSteps(stepsArray);
                         }}
                       />
@@ -414,8 +443,8 @@ function CreateFoodScreen({ route, navigation }) {
                   onPress={() => {
                     const stepsArray = [...steps];
                     stepsArray.push({
-                      value: '',
-                      imageSource: ''
+                      description: '',
+                      stepImage: ''
                     });
                     setSteps(stepsArray);
                   }}

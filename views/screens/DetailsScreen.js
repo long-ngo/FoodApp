@@ -12,10 +12,8 @@ function DetailsScreen({ route, navigation }) {
   const [steps, setSteps] = useState([]);
 
   useEffect(() => {
-    const ingredientsArray = ingredients.split('.').map((item) => item.trim());
-    const stepArray = Object.entries(step).sort(
-      (item1, item2) => item1[1].numberStep - item2[1].numberStep
-    );
+    const ingredientsArray = ingredients.split('&').map((item) => item.trim());
+    const stepArray = Object.entries(step);
     setIngredient(ingredientsArray);
     setSteps(stepArray);
     return () => {
@@ -48,10 +46,10 @@ function DetailsScreen({ route, navigation }) {
         <View
           style={{ marginHorizontal: 20, paddingVertical: 20, marginTop: -100 }}
         >
-          {steps.map((item) => (
+          {steps.map((item, index) => (
             <View style={{ marginTop: 20 }} key={item[0]}>
               <CardStepFood
-                numberStep={item[1].numberStep}
+                numberStep={index + 1}
                 description={item[1].description}
                 image={item[1].image}
               />

@@ -53,7 +53,7 @@ function LoginScreen({ route, navigation }) {
       );
       if (user) {
         ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
-        dispatch(addUser(user[1]));
+        dispatch(addUser(user));
         navigation.navigate({ name: 'Home' });
       } else {
         ToastAndroid.show('User or password error!', ToastAndroid.SHORT);
