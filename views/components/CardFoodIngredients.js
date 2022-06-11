@@ -26,63 +26,11 @@ function CardFoodIngredients({ title, time, ingredient }) {
         </View>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
             marginTop: 10
           }}
         >
           <View>
             <Text style={{ fontSize: 18 }}>Ingredients</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
-          >
-            <View style={{ marginRight: 15 }}>
-              <Text style={{ fontSize: 18 }}>Servings</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableOpacity activeOpacity={0.8}>
-                <View
-                  style={{
-                    backgroundColor: COLORS.light,
-                    width: 28,
-                    height: 28,
-                    borderRadius: 15,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <MaterialIcons
-                    name="add"
-                    size={28}
-                    color={COLORS.greyLight}
-                  />
-                </View>
-              </TouchableOpacity>
-              <Text style={{ fontSize: 18, marginHorizontal: 8 }}>1</Text>
-              <TouchableOpacity activeOpacity={0.8}>
-                <View
-                  style={{
-                    backgroundColor: COLORS.light,
-                    width: 28,
-                    height: 28,
-                    borderRadius: 15,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="minus"
-                    size={28}
-                    color={COLORS.greyLight}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
         <View>

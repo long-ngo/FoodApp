@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import COLORS from '../consts/colors';
 
 function GoBack({
   name,
   navigation,
   titleRight = '',
-  onPressTitleRight = () => {}
+  onPressTitleRight = () => {},
+  disabled = false
 }) {
   return (
     <View
@@ -26,8 +28,20 @@ function GoBack({
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{name}</Text>
       </View>
       {!!titleRight && (
-        <TouchableOpacity onPress={onPressTitleRight} activeOpacity={0.5}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{titleRight}</Text>
+        <TouchableOpacity
+          onPress={onPressTitleRight}
+          activeOpacity={0.5}
+          disabled={disabled}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: disabled ? COLORS.grey : COLORS.dark
+            }}
+          >
+            {titleRight}
+          </Text>
         </TouchableOpacity>
       )}
     </View>

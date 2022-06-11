@@ -17,17 +17,26 @@ function ButtonCategory({ title, image, active = false, onPress = () => {} }) {
         }}
       >
         {image && (
-          <View style={{ backgroundColor: COLORS.white, borderRadius: 20 }}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.white,
+              borderRadius: 35,
+              height: 35,
+              width: 35
+            }}
+          >
             <Image
               source={{
                 uri: image
               }}
               style={{
-                height: 35,
                 width: 35,
-                borderRadius: 15,
-                resizeMode: 'contain'
+                height: 35,
+                borderRadius: 35
               }}
+              resizeMode="contain"
             />
           </View>
         )}

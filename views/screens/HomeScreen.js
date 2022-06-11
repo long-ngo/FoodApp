@@ -33,6 +33,15 @@ function HomeScreen({ navigation, route }) {
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
       const dataArray = data ? Object.entries(data) : [];
+      dataArray.length &&
+        dataArray.unshift([
+          'All',
+          {
+            image:
+              'https://i.pinimg.com/originals/4d/05/d7/4d05d7f4db1c77d92c54d1342e7814af.jpg',
+            name: 'All'
+          }
+        ]);
       setCategories(dataArray);
       return () => {
         setCategories([]);

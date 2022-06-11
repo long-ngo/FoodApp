@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from '../consts/colors';
 import SettingsScreen from '../screens/SettingsScreen';
-import FavoriteScreen from '../screens/FavoriteScreen';
+import CreateCategoryScreen from '../screens/CreateCategoryScreen';
 import CreateFoodScreen from '../screens/CreateFoodScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -38,12 +38,20 @@ function BottomNavigator() {
             case 'Search':
               iconName = focused ? 'search' : 'search';
               return <MaterialIcons name={iconName} size={28} color={color} />;
-            case 'Favorite':
-              iconName = focused ? 'favorite' : 'favorite-outline';
-              return <MaterialIcons name={iconName} size={28} color={color} />;
+            case 'CreateCategory':
+              iconName = focused
+                ? 'circle-edit-outline'
+                : 'circle-edit-outline';
+              return (
+                <MaterialCommunityIcons
+                  name={iconName}
+                  size={28}
+                  color={color}
+                />
+              );
             case 'Settings':
-              iconName = focused ? 'settings' : 'settings';
-              return <MaterialIcons name={iconName} size={28} color={color} />;
+              iconName = focused ? 'md-settings-sharp' : 'md-settings-outline';
+              return <Ionicons name={iconName} size={28} color={color} />;
             case 'CreateFood':
               iconName = focused ? 'create' : 'create-outline';
               return <Ionicons name={iconName} size={28} color={color} />;
@@ -106,7 +114,7 @@ function BottomNavigator() {
       />
       {isLoggedIn ? (
         <Tab.Group>
-          <Tab.Screen name="Favorite" component={FavoriteScreen} />
+          <Tab.Screen name="CreateCategory" component={CreateCategoryScreen} />
         </Tab.Group>
       ) : (
         <Tab.Group>
