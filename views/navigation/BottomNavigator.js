@@ -5,8 +5,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from '../consts/colors';
 import SettingsScreen from '../screens/SettingsScreen';
-import CreateCategoryScreen from '../screens/CreateCategoryScreen';
-import CreateFoodScreen from '../screens/CreateFoodScreen';
+import FoodsScreen from '../screens/FoodsScreen';
+import CategoriesScreen from '../screens/CategoriesScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { View } from 'react-native';
@@ -38,7 +38,7 @@ function BottomNavigator() {
             case 'Search':
               iconName = focused ? 'search' : 'search';
               return <MaterialIcons name={iconName} size={28} color={color} />;
-            case 'CreateCategory':
+            case 'Category':
               iconName = focused
                 ? 'circle-edit-outline'
                 : 'circle-edit-outline';
@@ -52,7 +52,7 @@ function BottomNavigator() {
             case 'Settings':
               iconName = focused ? 'md-settings-sharp' : 'md-settings-outline';
               return <Ionicons name={iconName} size={28} color={color} />;
-            case 'CreateFood':
+            case 'Food':
               iconName = focused ? 'create' : 'create-outline';
               return <Ionicons name={iconName} size={28} color={color} />;
             case 'Login':
@@ -78,7 +78,7 @@ function BottomNavigator() {
       </Tab.Group>
       {isLoggedIn ? (
         <Tab.Group>
-          <Tab.Screen name="CreateFood" component={CreateFoodScreen} />
+          <Tab.Screen name="Food" component={FoodsScreen} />
         </Tab.Group>
       ) : (
         <Tab.Group>
@@ -114,7 +114,7 @@ function BottomNavigator() {
       />
       {isLoggedIn ? (
         <Tab.Group>
-          <Tab.Screen name="CreateCategory" component={CreateCategoryScreen} />
+          <Tab.Screen name="Category" component={CategoriesScreen} />
         </Tab.Group>
       ) : (
         <Tab.Group>

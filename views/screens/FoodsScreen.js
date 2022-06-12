@@ -20,12 +20,13 @@ import { ref, getDatabase, set, push, onValue } from 'firebase/database';
 import { uploadImage } from '../../firebase/upload';
 import { useSelector } from 'react-redux';
 
-function CreateFoodScreen({ route, navigation }) {
+function FoodsScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState(null);
   const [foodName, setFoodName] = useState(null);
   const [featured, setFeatured] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [foods, setFoods] = useState([]);
   const [foodImage, setFoodImage] = useState(null);
   const [steps, setSteps] = useState([]);
   const [open, setOpen] = useState(false);
@@ -45,6 +46,22 @@ function CreateFoodScreen({ route, navigation }) {
     });
     return () => {
       setCategories([]);
+      setActiveInput(null);
+      setIngredients([]);
+      setFoodImage(null);
+      setSteps([]);
+    };
+  }, []);
+
+  useEffect(() => {
+    const starCountRef = ref(db, 'foods');
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      const dataArray = data ? Object.entries(data) : [];
+      setFoods(dataArray);
+    });
+    return () => {
+      setFoods([]);
     };
   }, []);
 
@@ -82,6 +99,14 @@ function CreateFoodScreen({ route, navigation }) {
     }
   }
 
+  function clearAll() {
+    setFoodImage(null);
+    setFoodName(null);
+    setFeatured(null);
+    setIngredients([]);
+    setSteps([]);
+  }
+
   function writeFoodData(
     name,
     featured,
@@ -103,11 +128,23 @@ function CreateFoodScreen({ route, navigation }) {
       userId: userId,
       categoryId: categoryId
     })
-      .then(() => setIsLoading(false))
+      .then(() => {
+        setIsLoading(false);
+        clearAll();
+      })
       .catch((err) => console.log(err));
   }
 
   function checkAll() {
+    const foodsfilter = foods.filter(
+      (item) =>
+        foodName &&
+        item[1].userId === userLogin[0] &&
+        item[1].name === foodName.trim()
+    );
+    const stepEvery = steps.every((item) => item.description && item.stepImage);
+    const ingredientsEvery = ingredients.every((item) => item);
+
     if (
       !foodName ||
       !featured ||
@@ -117,6 +154,18 @@ function CreateFoodScreen({ route, navigation }) {
       !value
     ) {
       ToastAndroid.show('Hãy điền đủ thông tin', ToastAndroid.SHORT);
+      return false;
+    } else if (foodsfilter.length) {
+      ToastAndroid.show('Bạn đã tạo món này', ToastAndroid.SHORT);
+      return false;
+    } else if (!ingredientsEvery) {
+      ToastAndroid.show(
+        'Hãy điền đủ thông tin nguyên liệu',
+        ToastAndroid.SHORT
+      );
+      return false;
+    } else if (!stepEvery) {
+      ToastAndroid.show('Hãy điền đủ thông tin cách làm', ToastAndroid.SHORT);
       return false;
     } else {
       return true;
@@ -187,26 +236,26 @@ function CreateFoodScreen({ route, navigation }) {
                 borderColor: COLORS.grey
               }}
             >
-              {foodImage ? (
-                <Image
-                  source={{
-                    uri: foodImage
-                  }}
-                  style={{ width: 190, height: 190 }}
-                  resizeMode="contain"
-                />
-              ) : (
-                <TouchableOpacity
-                  onPress={() => pickImage('food')}
-                  activeOpacity={0.5}
-                >
+              <TouchableOpacity
+                onPress={() => pickImage('food')}
+                activeOpacity={0.5}
+              >
+                {foodImage ? (
+                  <Image
+                    source={{
+                      uri: foodImage
+                    }}
+                    style={{ width: 190, height: 200 }}
+                    resizeMode="contain"
+                  />
+                ) : (
                   <MaterialIcons
                     name="add-photo-alternate"
                     size={48}
                     color={COLORS.grey}
                   />
-                </TouchableOpacity>
-              )}
+                )}
+              </TouchableOpacity>
             </View>
             <View style={{ marginTop: 10 }}>
               <InputValue
@@ -392,7 +441,7 @@ function CreateFoodScreen({ route, navigation }) {
                     activeOpacity={0.8}
                     onPress={() => {
                       const arr = [...ingredients];
-                      arr.push('');
+                      arr.push(null);
                       setIngredients(arr);
                     }}
                   >
@@ -439,28 +488,28 @@ function CreateFoodScreen({ route, navigation }) {
                         borderRadius: 4
                       }}
                     >
-                      {item.stepImage ? (
-                        <Image
-                          style={{ width: 100, height: 100, borderRadius: 4 }}
-                          source={{
-                            uri: item.stepImage
-                          }}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <TouchableOpacity
-                          activeOpacity={0.8}
-                          onPress={() => {
-                            pickImage('step', index);
-                          }}
-                        >
+                      <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => {
+                          pickImage('step', index);
+                        }}
+                      >
+                        {item.stepImage ? (
+                          <Image
+                            style={{ width: 100, height: 100, borderRadius: 4 }}
+                            source={{
+                              uri: item.stepImage
+                            }}
+                            resizeMode="cover"
+                          />
+                        ) : (
                           <MaterialIcons
                             name="add-photo-alternate"
                             size={30}
                             color={COLORS.grey}
                           />
-                        </TouchableOpacity>
-                      )}
+                        )}
+                      </TouchableOpacity>
                     </View>
                     <View
                       style={{
@@ -529,8 +578,8 @@ function CreateFoodScreen({ route, navigation }) {
                     onPress={() => {
                       const stepsArray = [...steps];
                       stepsArray.push({
-                        description: '',
-                        stepImage: ''
+                        description: null,
+                        stepImage: null
                       });
                       setSteps(stepsArray);
                     }}
@@ -548,4 +597,4 @@ function CreateFoodScreen({ route, navigation }) {
   );
 }
 
-export default CreateFoodScreen;
+export default FoodsScreen;

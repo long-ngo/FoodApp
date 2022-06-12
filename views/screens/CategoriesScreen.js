@@ -15,7 +15,7 @@ import { ref, getDatabase, set, push, onValue } from 'firebase/database';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImage } from '../../firebase/upload';
 
-function CreateCategoryScreen({ route, navigation }) {
+function CategoriesScreen({ route, navigation }) {
   const [categoryImage, setCategoryImage] = useState(null);
   const [activeInput, setActiveInput] = useState(null);
   const [categoryName, setCategoryName] = useState(null);
@@ -32,6 +32,8 @@ function CreateCategoryScreen({ route, navigation }) {
     });
     return () => {
       setCategories([]);
+      setCategoryImage(null);
+      setCategoryName(null);
     };
   }, []);
 
@@ -56,42 +58,48 @@ function CreateCategoryScreen({ route, navigation }) {
     })
       .then(() => {
         setIsLoading(false);
+        clearAll();
         ToastAndroid.show('Tạo danh mục thành công', ToastAndroid.SHORT);
       })
       .catch((err) => console.log(err));
   }
 
   function checkAll() {
+    const findIndex = categories.findIndex(
+      (item) => categories && item[1].name === categoryName.trim()
+    );
+
     if (!categoryName || !categoryImage) {
       ToastAndroid.show('Hãy điền đủ thông tin', ToastAndroid.SHORT);
       return false;
+    } else if (findIndex >= 0) {
+      ToastAndroid.show('Hãy thử với tên khác', ToastAndroid.SHORT);
+      return false;
+    } else {
+      return true;
     }
-    return true;
+  }
+
+  function clearAll() {
+    setCategoryImage(null);
+    setCategoryName(null);
   }
 
   async function handleSubmit() {
     if (checkAll()) {
-      const findIndex = categories.findIndex(
-        (item) => item[1].name === categoryName
+      setIsLoading(true);
+      const url = await uploadImage(
+        categoryImage,
+        `categories/${categoryName}`
       );
-
-      if (findIndex < 0) {
-        setIsLoading(true);
-        const url = await uploadImage(
-          categoryImage,
-          `categories/${categoryName}`
-        );
-        writeCategoryData(categoryName, url);
-      } else {
-        ToastAndroid.show('Hãy thử với tên khác', ToastAndroid.SHORT);
-      }
+      writeCategoryData(categoryName, url);
     }
   }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <GoBack
-        name={'Create Category'}
+        name={'Tạo Danh Mục '}
         navigation={navigation}
         titleRight="Xong"
         onPressTitleRight={handleSubmit}
@@ -100,7 +108,7 @@ function CreateCategoryScreen({ route, navigation }) {
       {isLoading ? (
         <ActivityIndicator size={'large'} color={COLORS.primary} />
       ) : (
-        <View style={{ marginHorizontal: 30, marginBottom: 30 }}>
+        <View>
           <View
             style={{
               alignItems: 'center',
@@ -108,37 +116,33 @@ function CreateCategoryScreen({ route, navigation }) {
               height: 200,
               borderRadius: 10,
               borderWidth: 0.5,
-              borderColor: COLORS.grey
+              borderColor: COLORS.grey,
+              marginHorizontal: 30
             }}
           >
-            {categoryImage ? (
-              <Image
-                source={{
-                  uri: categoryImage
-                }}
-                style={{ width: '100%', height: 196 }}
-                resizeMode="contain"
-              />
-            ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  pickImage();
-                }}
-                activeOpacity={0.5}
-              >
+            <TouchableOpacity onPress={pickImage} activeOpacity={0.5}>
+              {categoryImage ? (
+                <Image
+                  source={{
+                    uri: categoryImage
+                  }}
+                  style={{ width: 200, height: 198 }}
+                  resizeMode="contain"
+                />
+              ) : (
                 <MaterialIcons
                   name="add-photo-alternate"
                   size={48}
                   color={COLORS.grey}
                 />
-              </TouchableOpacity>
-            )}
+              )}
+            </TouchableOpacity>
           </View>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 10, marginHorizontal: 30 }}>
             <InputValue
               name={'categoryName'}
               activeInput={activeInput}
-              placeholder="Category name"
+              placeholder="Nhập danh mục"
               onPressIn={() => setActiveInput('categoryName')}
               onChangeText={(text) => setCategoryName(text)}
               value={categoryName}
@@ -150,4 +154,4 @@ function CreateCategoryScreen({ route, navigation }) {
   );
 }
 
-export default CreateCategoryScreen;
+export default CategoriesScreen;

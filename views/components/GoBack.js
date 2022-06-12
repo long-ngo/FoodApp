@@ -5,7 +5,7 @@ import COLORS from '../consts/colors';
 function GoBack({
   name,
   navigation,
-  titleRight = '',
+  titleRight = null,
   onPressTitleRight = () => {},
   disabled = false
 }) {
@@ -27,7 +27,7 @@ function GoBack({
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{name}</Text>
       </View>
-      {!!titleRight && (
+      {titleRight && (
         <TouchableOpacity
           onPress={onPressTitleRight}
           activeOpacity={0.5}

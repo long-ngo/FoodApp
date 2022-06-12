@@ -39,7 +39,7 @@ function HomeScreen({ navigation, route }) {
           {
             image:
               'https://i.pinimg.com/originals/4d/05/d7/4d05d7f4db1c77d92c54d1342e7814af.jpg',
-            name: 'All'
+            name: 'Tất cả'
           }
         ]);
       setCategories(dataArray);
@@ -77,17 +77,17 @@ function HomeScreen({ navigation, route }) {
       >
         <View>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontSize: 28 }}>Hello,</Text>
+            <Text style={{ fontSize: 28 }}>Xin chào,</Text>
             <Text style={{ fontSize: 28, fontWeight: 'bold', marginLeft: 10 }}>
               {isLoggedIn
                 ? userLogin[1].name
                   ? userLogin[1].name
                   : userLogin[1].username
-                : 'You'}
+                : 'Bạn'}
             </Text>
           </View>
           <Text style={{ fontSize: 22, color: COLORS.grey, marginTop: 5 }}>
-            What do you want today
+            Bạn muốn làm gì hôm nay
           </Text>
         </View>
         <TouchableOpacity
@@ -130,7 +130,7 @@ function HomeScreen({ navigation, route }) {
           <MaterialIcons name="search" size={28} />
           <TextInput
             style={{ fontSize: 18, flex: 1, marginLeft: 10 }}
-            placeholder="Search for food"
+            placeholder="Tìm kiếm món ăn"
           />
         </View>
         <TouchableOpacity
@@ -168,7 +168,7 @@ function HomeScreen({ navigation, route }) {
                 const filterFoods = foods.filter(
                   (food) => food[1].categoryId === item[0]
                 );
-                if (item[1].name === 'All') {
+                if (item[1].name === 'Tất cả') {
                   setShowFoods(foods);
                 } else {
                   setShowFoods(filterFoods);

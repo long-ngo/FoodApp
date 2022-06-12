@@ -41,7 +41,7 @@ function OnBoardScreen({ navigation, route }) {
               color: COLORS.grey
             }}
           >
-            A place to share cooking knowledge anywhere
+            Nơi để chia sẻ các công thức nấu ăn miễn phí
           </Text>
         </View>
         <View
@@ -81,7 +81,7 @@ function OnBoardScreen({ navigation, route }) {
           ></View>
         </View>
         <ButtonPrimary
-          title={'Getting Start'}
+          title={'Bắt Đầu'}
           onPress={() =>
             navigation.navigate({
               name: 'BottomNavigator'

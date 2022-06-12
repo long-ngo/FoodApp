@@ -30,7 +30,7 @@ function CardFoodIngredients({ title, time, ingredient }) {
           }}
         >
           <View>
-            <Text style={{ fontSize: 18 }}>Ingredients</Text>
+            <Text style={{ fontSize: 18 }}>Nguyên liệu</Text>
           </View>
         </View>
         <View>

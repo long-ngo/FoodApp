@@ -18,8 +18,8 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 function LoginScreen({ route, navigation }) {
   const [activeInput, setActiveInput] = useState('');
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState('ryu');
-  const [password, setPassword] = useState('1');
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
   const dispatch = useDispatch();
   const db = getDatabase();
 
@@ -34,38 +34,36 @@ function LoginScreen({ route, navigation }) {
   }, []);
 
   function checkAll() {
-    if (username === '' || password === '') {
-      alert('giá trị không được rỗng');
+    const userFind = users.find(
+      (item) => item[1].username === username && item[1].password === password
+    );
+
+    if (!username || !password) {
+      ToastAndroid.show('Hãy nhập đủ thông tin', ToastAndroid.SHORT);
       return false;
-    } else if (!users || !users.length) {
+    } else if (!userFind) {
+      ToastAndroid.show(
+        'Tên đăng nhập hoặc mật khẩu không đúng',
+        ToastAndroid.SHORT
+      );
       return false;
     } else {
-      return true;
+      return userFind;
     }
   }
 
   function login() {
-    if (checkAll()) {
-      const user = users.find(
-        (item) =>
-          item[1].username === username.trim() &&
-          item[1].password === password.trim()
-      );
-      if (user) {
-        ToastAndroid.show('Login successful!', ToastAndroid.SHORT);
-        dispatch(addUser(user));
-        navigation.navigate({ name: 'Home' });
-      } else {
-        ToastAndroid.show('User or password error!', ToastAndroid.SHORT);
-      }
-    } else {
-      ToastAndroid.show('Login false!', ToastAndroid.SHORT);
+    const user = checkAll();
+    if (user) {
+      dispatch(addUser(user));
+      navigation.navigate({ name: 'Home' });
+      ToastAndroid.show('Đăng nhập thành công!', ToastAndroid.SHORT);
     }
   }
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-      <GoBack name={'Login'} navigation={navigation} />
+      <GoBack name={'Đăng nhập'} navigation={navigation} />
       <View style={{ marginHorizontal: 40, marginTop: 30 }}>
         <View style={{ alignItems: 'center' }}>
           <Image
@@ -85,12 +83,12 @@ function LoginScreen({ route, navigation }) {
           }}
         >
           <View>
-            <Text style={{ fontSize: 35, fontWeight: 'bold' }}>Login</Text>
+            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Đăng Nhập</Text>
           </View>
           <View>
             <Text
               style={{
-                fontSize: 35,
+                fontSize: 30,
                 fontWeight: 'bold',
                 marginHorizontal: 10
               }}
@@ -104,7 +102,7 @@ function LoginScreen({ route, navigation }) {
             }}
             activeOpacity={0.5}
           >
-            <Text style={{ color: COLORS.light, fontSize: 20 }}>Sign Up</Text>
+            <Text style={{ color: COLORS.light, fontSize: 20 }}>Đăng Ký</Text>
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 30 }}>
@@ -112,7 +110,7 @@ function LoginScreen({ route, navigation }) {
             <InputValue
               name={'username'}
               activeInput={activeInput}
-              placeholder="Username"
+              placeholder="Tên đăng nhập"
               onPressIn={() => setActiveInput('username')}
               onChangeText={(text) => setUsername(text)}
               value={username}
@@ -122,7 +120,7 @@ function LoginScreen({ route, navigation }) {
             <InputValue
               name={'password'}
               activeInput={activeInput}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onPressIn={() => setActiveInput('password')}
               onChangeText={(text) => setPassword(text)}
               type="password"
@@ -138,7 +136,7 @@ function LoginScreen({ route, navigation }) {
         >
           <View style={{ width: 200 }}>
             <ButtonPrimary
-              title={'Login'}
+              title={'Đăng Nhập'}
               onPress={() => {
                 login();
               }}
