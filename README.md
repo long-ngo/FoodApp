@@ -7,6 +7,7 @@
 - Cài nodejs nếu chưa có
 - Cài máy ảo
 - Cài expo bằng lệnh: yarn global add expo-cli
+- Cài yarn nếu chưa có npm install -g yarn
 
 2. Thêm thư viện
 
