@@ -10,8 +10,12 @@
 
 2. Thêm thư viện
 
-- Thêm thư viện bằng lệnh : yarn
+- Thêm thư viện bằng lệnh: yarn
 
-3. Run app
+3. Kết nối database
 
-- chạy bằng lệnh : yarn start
+- Coppy file .env vào thư mục gốc của ứng dụng
+
+4. Run app
+
+- Chạy bằng lệnh: yarn start
