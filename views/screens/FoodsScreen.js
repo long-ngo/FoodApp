@@ -216,7 +216,7 @@ function FoodsScreen({ route, navigation }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <GoBack
         onPressTitleRight={handleSubmit}
-        name={'Create Food'}
+        name={'Tạo món'}
         navigation={navigation}
         titleRight="Xong"
         disabled={isLoading}
@@ -261,7 +261,7 @@ function FoodsScreen({ route, navigation }) {
               <InputValue
                 name={'foodName'}
                 activeInput={activeInput}
-                placeholder="Food name"
+                placeholder="Tên món"
                 onPressIn={() => setActiveInput('foodName')}
                 onChangeText={(text) => setFoodName(text)}
                 value={foodName}
@@ -271,7 +271,7 @@ function FoodsScreen({ route, navigation }) {
               <InputValue
                 name={'featured'}
                 activeInput={activeInput}
-                placeholder="Featured"
+                placeholder="Đặc trưng"
                 onPressIn={() => setActiveInput('featured')}
                 onChangeText={(text) => setFeatured(text)}
                 value={featured}
@@ -285,7 +285,7 @@ function FoodsScreen({ route, navigation }) {
               }}
             >
               <View style={{ marginRight: 15 }}>
-                <Text style={{ fontSize: 20 }}>Time</Text>
+                <Text style={{ fontSize: 20 }}>Thời gian nấu</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity
@@ -447,7 +447,7 @@ function FoodsScreen({ route, navigation }) {
                   >
                     <MaterialIcons name="add" size={30} />
                   </TouchableOpacity>
-                  <Text style={{ fontSize: 14, color: COLORS.grey }}>Add</Text>
+                  <Text style={{ fontSize: 14, color: COLORS.grey }}>Thêm</Text>
                 </View>
               </View>
             </View>
@@ -586,7 +586,7 @@ function FoodsScreen({ route, navigation }) {
                   >
                     <MaterialIcons name="add" size={30} />
                   </TouchableOpacity>
-                  <Text style={{ fontSize: 14, color: COLORS.grey }}>Add</Text>
+                  <Text style={{ fontSize: 14, color: COLORS.grey }}>Thêm</Text>
                 </View>
               </View>
             </View>
