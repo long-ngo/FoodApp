@@ -19,11 +19,12 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 import { useSelector } from 'react-redux';
 
 function HomeScreen({ navigation, route }) {
-  const [categoryIndex, setCategoryIndex] = useState(0);
+  const [categoryIndex, setCategoryIndex] = useState('All');
   const [categories, setCategories] = useState([]);
   const [showCategories, setShowCategories] = useState([]);
   const [foods, setFoods] = useState([]);
   const [showFoods, setShowFoods] = useState([]);
+  const [inputFind, setInputFind] = useState(null);
   const db = getDatabase();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userLogin = useSelector((state) => state.user.userLogin);
@@ -131,6 +132,20 @@ function HomeScreen({ navigation, route }) {
           <TextInput
             style={{ fontSize: 18, flex: 1, marginLeft: 10 }}
             placeholder="Tìm kiếm món ăn"
+            onChangeText={(text) => {
+              setInputFind(text);
+              const foodArray = foods.filter((item) => {
+                return (
+                  (categoryIndex === 'All' &&
+                    item[1].name.toLowerCase().includes(text)) ||
+                  (item[1].name.toLowerCase().includes(text) &&
+                    item[1].categoryId === categoryIndex)
+                );
+              });
+
+              setShowFoods(foodArray);
+            }}
+            value={inputFind}
           />
         </View>
         <TouchableOpacity
@@ -157,14 +172,14 @@ function HomeScreen({ navigation, route }) {
         }}
       >
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {showCategories.map((item, index) => (
+          {showCategories.map((item) => (
             <ButtonCategory
-              active={categoryIndex == index ? true : false}
+              active={categoryIndex === item[0] ? true : false}
               key={item[0]}
               title={item[1].name}
               image={item[1].image}
               onPress={() => {
-                setCategoryIndex(index);
+                setCategoryIndex(item[0]);
                 const filterFoods = foods.filter(
                   (food) => food[1].categoryId === item[0]
                 );
