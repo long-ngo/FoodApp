@@ -66,7 +66,7 @@ function CategoriesScreen({ route, navigation }) {
 
   function checkAll() {
     const findIndex = categories.findIndex(
-      (item) => categories && item[1].name === categoryName.trim()
+      (item) => categoryName && item[1].name === categoryName.trim()
     );
 
     if (!categoryName || !categoryImage) {
